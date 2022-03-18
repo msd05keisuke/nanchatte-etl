@@ -1,0 +1,65 @@
+version: '3'
+services:
+    embulk:
+        container_name: embulk
+        build: ./embulk
+        tty: true
+    input1:
+        container_name: input1
+        image: mariadb
+        restart: always
+        ports:
+          - 3306:3306
+        environment:
+          MARIADB_ROOT_PASSWORD: password
+          TZ: Asia/Tokyo
+    input2:
+        container_name: input2
+        image: mariadb
+        restart: always
+        ports:
+          - 3307:3306
+        environment:
+          MARIADB_ROOT_PASSWORD: password
+          TZ: Asia/Tokyo
+    output:
+        container_name: output
+        image: mariadb
+        restart: always
+        ports:
+          - 3308:3306
+        environment:
+          MARIADB_ROOT_PASSWORD: password
+          TZ: Asia/Tokyo
+    pma_input1:
+        image: phpmyadmin
+        restart: always
+        ports:
+          - 8081:80
+        environment:
+          - PMA_ARBITRARY=1
+          - PMA_HOST=input1
+          - PMA_USER=root
+          - PMA_PASSWORD=password
+    pma_input2:
+        image: phpmyadmin
+        restart: always
+        ports:
+          - 8082:80
+        environment:
+          - PMA_ARBITRARY=1
+          - PMA_HOST=input2
+          - PMA_USER=root
+          - PMA_PASSWORD=password
+    pma_output:
+        image: phpmyadmin
+        restart: always
+        ports:
+          - 8083:80
+        environment:
+          - PMA_ARBITRARY=1
+          - PMA_HOST=output
+          - PMA_USER=root
+          - PMA_PASSWORD=password
+          
+  

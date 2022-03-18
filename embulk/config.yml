@@ -1,0 +1,29 @@
+in:
+  type: mysql
+  host: input1
+  database: input1
+  user: root
+  password: password
+  table: "basketballteams"
+  select: "*"
+  incremental: true
+  incremental_columns: [id]
+filters:
+  - type: column
+    columns:
+        - {name: name}
+        - {name: age}
+        - {name: height}
+    add_columns:
+      - {name: team, type: string, default: 'basketball'}
+      - {name: origin_id, src: id}
+      - {name: origin_created_at, type: timestamp, src: created_at}
+    default_timezone: "Asia/Tokyo"
+out:
+  type: mysql
+  host: output
+  database: output
+  user: root
+  password: password
+  table: "allstars"
+  mode: insert
